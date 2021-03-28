@@ -12,11 +12,7 @@ interface TodosState {
 };
 
 const INITIAL_STATE = {
-  todos: [
-    { name: 'teste', description: 'descricao do todo', status: false, id: 1 },
-    { name: 'outro teste', description: 'descricao do todo', status: false, id: 2 },
-    { name: 'Lavar louça', description: 'Muita louça', status: true, id: 3 }
-  ],
+  todos: [],
 };
 
 type TodoApiResponse = {

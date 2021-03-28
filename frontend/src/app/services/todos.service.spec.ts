@@ -1,16 +1,45 @@
 import { TestBed } from '@angular/core/testing';
+import { of, MonoTypeOperatorFunction } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
+import { Todo } from '../models/todo.model';
 import { TodosService } from './todos.service';
 
 describe('TodosService', () => {
-  let service: TodosService;
+  let todoService: TodosService;
+  let httpSpy: any;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(TodosService);
-  });
+  const testTodos: Todo[] = [
+    { id: 1, name: "Estudar angular obserables", description: "Bons artigos no indepth.dev", status: false },
+    { id: 2, name: "Lavar a louça", description: "Tem um monte", status: false },
+  ];
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+  // Testar metodo getTodos do todoService
+  it('deve obter todos da API quando chamar getTodos', () => {
+
+  })
+
+  // Testar metodo de update do todo
+  // retorno da api PUT /todos/:id
+  // {
+  //  message: string,
+  //  todos: Todo[],
+  //  todo: Todo
+  // }
+  it('deve atualizar item no estado local após sucesso no PUT da API de todos', () => {
+
+  })
 });
+
+const expectEvents = <T>(items: T[], done: DoneFn): MonoTypeOperatorFunction<T> => {
+  let idx = 0;
+  return (obs) => obs.pipe(
+    tap((item) => {
+      expect(item).toEqual(items[idx]);
+      idx++;
+      if (idx == items.length) {
+        done();
+      }
+    })
+  )
+}
