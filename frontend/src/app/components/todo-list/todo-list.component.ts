@@ -30,7 +30,10 @@ export class TodoListComponent implements OnInit {
       this.todoFilter.valueChanges.pipe(startWith(this.todoFilter.value))
     ]).pipe(
       map(([todos, todoFilter]) => {
-        return todos.filter(todo => todo.status === todoFilter)
+        if (todoFilter !== null) {
+          return todos.filter(todo => todo.status === todoFilter)
+        }
+        return todos;
       }));
   }
 

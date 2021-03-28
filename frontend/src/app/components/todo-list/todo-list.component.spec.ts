@@ -3,7 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MonoTypeOperatorFunction, of } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { skip, tap } from 'rxjs/operators';
 
 import { Todo } from '../../models/todo.model';
 import { TodoListComponent } from './todo-list.component';
@@ -29,6 +29,10 @@ describe('TodoListComponent', () => {
       ],
       providers: [
         TodoListComponent,
+        {
+          provide: TodosService,
+          useValue: todoServiceSpy
+        }
       ]
     })
     .compileComponents();
@@ -38,11 +42,45 @@ describe('TodoListComponent', () => {
     component = TestBed.inject(TodoListComponent);
   })
 
-  it('deve mostrar todos os to-dos caso um filtro não seja especificado', () => {
+  it('deve mostrar todos os to-dos caso um filtro não seja especificado', (done) => {
+    // Given: há dois todos no todo service
+    todoServiceSpy.todos$ = of(testTodos);
+
+    // Given: o componente foi inicializado
+    component.ngOnInit();
+
+    // When: faz-se a inscrição no observables de todos$
+    component.todos$
+      .pipe(
+        skip(1),
+        expectEvents([
+          testTodos,
+        ], done)
+      ).subscribe()
+
+    // Given: o filtro está com um valor nulo
+    component.todoFilter.setValue(null);
   });
 
-  it('deve mostrar apenas os to-dos completos quando o filtro for igual a true', () => {
+  it('deve mostrar apenas os to-dos completos quando o filtro for igual a true', (done) => {
+    // Given: há dois todos no todo service
+    todoServiceSpy.todos$ = of(testTodos);
 
+    // Given: o componente foi inicializado
+    component.ngOnInit();
+
+
+    // Given: há uma inscrição no observable de todos$
+    component.todos$
+      .pipe(
+        skip(1),
+        expectEvents([
+          testTodos.slice(1)
+        ], done)
+      ).subscribe()
+
+    // When: o filtro muda para todos completados (todoFilter === true)
+    component.todoFilter.setValue(true);
   })
 });
 

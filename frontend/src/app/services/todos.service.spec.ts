@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { of, MonoTypeOperatorFunction } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
@@ -6,7 +7,7 @@ import { Todo } from '../models/todo.model';
 import { TodosService } from './todos.service';
 
 describe('TodosService', () => {
-  let todoService: TodosService;
+  let todosService: TodosService;
   let httpSpy: any;
 
   const testTodos: Todo[] = [
@@ -14,9 +15,64 @@ describe('TodosService', () => {
     { id: 2, name: "Lavar a louça", description: "Tem um monte", status: false },
   ];
 
-  // Testar metodo getTodos do todoService
-  it('deve obter todos da API quando chamar getTodos', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule
+      ],
+      providers: [
+        TodosService
+      ]
+    })
+  })
 
+  beforeEach(() => {
+    httpSpy = jasmine.createSpyObj('HttpClient', ['get', 'put']);
+
+    // SUT
+    todosService = new TodosService(httpSpy);
+  })
+
+  // Testar metodo getTodos do todoService
+  it('deve obter todos da API quando chamar getTodos', (done) => {
+    // Given: a api retorna 2 itens de to-dos
+    httpSpy.get.and.returnValue(of({ todos: testTodos }));
+
+
+    todosService.todos$
+      .pipe(
+        // Then: recebe-se dois eventos com o estado inicial e os itens da API
+        expectEvents([
+          [],           // Estado Inicial
+          testTodos     // Resposta da API
+        ], done)
+      )
+      .subscribe()
+
+    // When: chama-se o metodo getTodos
+    todosService.getTodos();
+  })
+
+  it('deve obter to-dos da API quando chamar getTodos (HttpClientTestingModule)', (done) => {
+    // System Under Test (SUT)
+    const todosService = TestBed.inject(TodosService); 
+    const httpMock = TestBed.inject(HttpTestingController);
+
+    todosService.todos$
+      .pipe(
+        expectEvents([
+          [],           // Estado Inicial
+          testTodos     // Resposta da API
+        ], done)
+      )
+      .subscribe()
+
+    // When: chama-se o metodo getTodos
+    todosService.getTodos();
+
+    const req = httpMock.expectOne('http://localhost:4000/todos/');
+    expect(req.request.method).toEqual('GET');
+    req.flush({ todos: testTodos });
   })
 
   // Testar metodo de update do todo
@@ -26,8 +82,30 @@ describe('TodosService', () => {
   //  todos: Todo[],
   //  todo: Todo
   // }
-  it('deve atualizar item no estado local após sucesso no PUT da API de todos', () => {
+  it('deve atualizar item no estado local após sucesso no PUT da API de todos', (done) => {
+    // Given: há um update na API
+    httpSpy.put.and.callFake((endpoint, data) => {
+      return of({ todo: { ...testTodos[1], ...data } })
+    });
 
+    // Given: os dados já foram obtidos do backend
+    httpSpy.get.and.returnValue(of({ todos: testTodos }));
+    todosService.getTodos();
+
+    const novaDescricao = "Acumulou a louça do almoço"
+    const updatedTodo = { ...testTodos[1], description: novaDescricao };
+    const updatedTodos = [ testTodos[0], updatedTodo];
+
+    todosService.todos$
+      .pipe(
+        expectEvents([
+          testTodos,
+          updatedTodos     // Resposta da API
+        ], done)
+      )
+      .subscribe()
+
+    todosService.updateTodo(2, updatedTodo);
   })
 });
 
