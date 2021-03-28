@@ -1,0 +1,12 @@
+
+.todo-accordion-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.todo-descricao {
+    padding: 16px 0px;
+}
+
+.todo-actions {
+}

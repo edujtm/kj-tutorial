@@ -1,0 +1,35 @@
+<form class="clr-form clr-form-horizontal">
+  <div class="todo-input-section">
+    <!-- Input nome -->
+    <div class="clr-form-control">
+      <label for="name" class="clr-control-label">Nome</label>
+      <div class="clr-control-container">
+        <div class="clr-input-wrapper">
+          <input type="text" id="name" placeholder="Fazer as compras" class="clr-input" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Input Descrição -->
+    <div class="clr-form-control">
+      <label for="description" class="clr-control-label">Descrição</label>
+      <div class="clr-control-container">
+        <div class="clr-textarea-wrapper">
+          <textarea  id="description" placeholder="Comprar maçãs" class="clr-textarea"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <clr-toggle-container>
+      <label>Estado</label>
+      <clr-toggle-wrapper>
+        <input type="checkbox" clrToggle name="status" value="" [(ngModel)]="status"/>
+        <label>{{ status ? 'Finalizado' : 'A fazer' }}</label>
+      </clr-toggle-wrapper>
+    </clr-toggle-container>
+    </div>
+    <clr-button-group>
+      <clr-button class="btn btn-success-outline">Salvar</clr-button>
+      <clr-button [routerLink]="['../']">Voltar</clr-button>
+    </clr-button-group>
+</form>
