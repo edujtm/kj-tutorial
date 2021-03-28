@@ -35,7 +35,9 @@
 </div>
 <clr-accordion>
   <clr-accordion-panel *ngFor="let todo of (todos$ | async)">
-    <clr-accordion-title>{{ todo.name }}</clr-accordion-title>
+    <clr-accordion-title>
+      {{ todo.name }}
+    </clr-accordion-title>
     <clr-accordion-content *clrIfExpanded>
       <div class="todo-accordion-content">
         <div class="todo-descricao">

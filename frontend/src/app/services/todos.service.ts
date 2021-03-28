@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 import { Todo } from '../models/todo.model';
@@ -44,23 +46,25 @@ export class TodosService extends Store<TodosState> {
       })
   }
 
-  createTodo(data: Omit<Todo, 'id'>) {
+  createTodo(data: Omit<Todo, 'id'>): void {
     this.http.post<TodoApiResponse>(`${environment.backendApi}/todos`, data)
       .subscribe((res) => {
         this.update(state => {
           return { todos: [...state.todos, res.todo] };
         })
-      })
+      });
   }
 
-  updateTodo(todoId: number, data: Omit<Todo, 'id'>) {
-    this.http.put<TodoApiResponse>(`${environment.backendApi}/todos/${todoId}`, data)
-      .subscribe((res) => {
-        this.update(state => {
-          const currentTodos = state.todos.filter(todo => todo.id !== res.todo.id);
-          return { todos: [...currentTodos, res.todo] };
-        });
+  updateTodo(todoId: number, data: Omit<Todo, 'id'>): void  {
+    this.http.put<TodoApiResponse>(
+      `${environment.backendApi}/todos/${todoId}`, 
+      data
+    ).subscribe((res) => {
+      this.update(state => {
+        const currentTodos = state.todos.filter(todo => todo.id !== res.todo.id);
+        return { todos: [...currentTodos, res.todo] };
       });
+    });
   }
 
   deleteTodo(todoId: number): void {
@@ -73,7 +77,7 @@ export class TodosService extends Store<TodosState> {
       });
   }
 
-  getTodo(todoId: number): Todo {
+ getTodo(todoId: number): Todo {
     return this.state.todos.find(todo => todo.id === todoId);
   }
 }

@@ -4,8 +4,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { map } from 'rxjs/operators';
 
 import { TodosService } from '../../services/todos.service';
-import { Todo } from '../../models/todo.model';
-
 
 type CreateForm = {
   type: "create"
@@ -23,7 +21,7 @@ type FormType =
 @Component({
   selector: 'app-todo-form',
   templateUrl: './todo-form.component.html',
-  styleUrls: ['./todo-form.component.css']
+  styleUrls: ['./todo-form.component.css'],
 })
 export class TodoFormComponent implements OnInit {
 
@@ -62,7 +60,7 @@ export class TodoFormComponent implements OnInit {
             itemId
           };
 
-          const todo = this.todoService.getTodo(parseInt(id));
+          const todo = this.todoService.getTodo(itemId);
           this.todoForm.reset({ ...todo })
         }
       });
@@ -72,6 +70,7 @@ export class TodoFormComponent implements OnInit {
     if (this.todoForm.valid) {
       if (this.formType.type === "create") {
         this.todoService.createTodo(this.todoForm.value);
+
       } else if (this.formType.type === "update") {
         const { itemId } = this.formType;
         const formData = this.todoForm.value;
@@ -81,5 +80,6 @@ export class TodoFormComponent implements OnInit {
       this.router.navigate(['../']);
     }
   }
+
 
 }
