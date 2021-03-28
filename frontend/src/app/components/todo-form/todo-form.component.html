@@ -1,11 +1,17 @@
-<form class="clr-form clr-form-horizontal">
+<form class="clr-form clr-form-horizontal" [formGroup]="todoForm" (submit)="submitTodo()">
   <div class="todo-input-section">
     <!-- Input nome -->
     <div class="clr-form-control">
       <label for="name" class="clr-control-label">Nome</label>
       <div class="clr-control-container">
         <div class="clr-input-wrapper">
-          <input type="text" id="name" placeholder="Fazer as compras" class="clr-input" />
+          <input
+            type="text" 
+            id="name" 
+            placeholder="Fazer as compras" 
+            class="clr-input"
+            formControlName="name"
+          />
         </div>
       </div>
     </div>
@@ -15,7 +21,12 @@
       <label for="description" class="clr-control-label">Descrição</label>
       <div class="clr-control-container">
         <div class="clr-textarea-wrapper">
-          <textarea  id="description" placeholder="Comprar maçãs" class="clr-textarea"></textarea>
+          <textarea
+            id="description"
+            placeholder="Comprar maçãs" 
+            class="clr-textarea" 
+            formControlName="description">
+          </textarea>
         </div>
       </div>
     </div>
@@ -23,13 +34,13 @@
     <clr-toggle-container>
       <label>Estado</label>
       <clr-toggle-wrapper>
-        <input type="checkbox" clrToggle name="status" value="" [(ngModel)]="status"/>
-        <label>{{ status ? 'Finalizado' : 'A fazer' }}</label>
+        <input type="checkbox" clrToggle name="status" value="" formControlName="status" />
+        <label>{{ todoForm.get('status').value ? 'Finalizado' : 'A fazer' }}</label>
       </clr-toggle-wrapper>
     </clr-toggle-container>
     </div>
     <clr-button-group>
-      <clr-button class="btn btn-success-outline">Salvar</clr-button>
+      <clr-button class="btn btn-success-outline" type="submit">Salvar</clr-button>
       <clr-button [routerLink]="['../']">Voltar</clr-button>
     </clr-button-group>
 </form>

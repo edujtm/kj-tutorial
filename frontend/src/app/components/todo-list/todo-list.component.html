@@ -31,7 +31,7 @@
     </div>
   </div>
 
-  <button class="btn btn-primary" [routerLink]="['/', 'new']">Novo</button>
+  <button class="btn btn-primary" [routerLink]="['/','todos', 'new']">Novo</button>
 </div>
 <clr-accordion>
   <clr-accordion-panel *ngFor="let todo of (todos$ | async)">
@@ -42,8 +42,8 @@
           {{ todo.description }}
         </div>
         <clr-button-group class="todo-actions">
-          <clr-button class="btn btn-outline">Edit</clr-button>
-          <clr-button class="btn btn-danger-outline">Delete</clr-button>
+          <clr-button class="btn btn-outline" [routerLink]="['/', 'todos', todo.id]">Editar</clr-button>
+          <clr-button class="btn btn-danger-outline" (click)="onDelete(todo)">Deletar</clr-button>
         </clr-button-group>
       </div>
     </clr-accordion-content>

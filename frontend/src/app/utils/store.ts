@@ -21,7 +21,14 @@ export class Store<T> {
     );
   }
 
-  protected update(newState: Partial<T>) {
+  protected update(action: ((state: T) => Partial<T>) | Partial<T>) {
+    let newState: Partial<T>;
+    if (typeof action === "function") {
+      newState = action(this.state); 
+    } else {
+      newState = action;
+    }
+
     this.store$.next({
       ...this.state,
       ...newState

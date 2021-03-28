@@ -33,4 +33,8 @@ export class TodoListComponent implements OnInit {
         return todos.filter(todo => todo.status === todoFilter)
       }));
   }
+
+  onDelete(todo: Todo) {
+    this.todosService.deleteTodo(todo.id);
+  }
 }
