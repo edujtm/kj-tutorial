@@ -27,7 +27,7 @@ describe('TodosService', () => {
   })
 
   beforeEach(() => {
-    httpSpy = jasmine.createSpyObj('HttpClient', ['get', 'put']);
+    httpSpy = jasmine.createSpyObj('HttpClient', ['get', 'put', 'delete']);
 
     // SUT
     todosService = new TodosService(httpSpy);
@@ -38,19 +38,12 @@ describe('TodosService', () => {
     // Given: a api retorna 2 itens de to-dos
     httpSpy.get.and.returnValue(of({ todos: testTodos }));
 
-
-    todosService.todos$
-      .pipe(
-        // Then: recebe-se dois eventos com o estado inicial e os itens da API
-        expectEvents([
-          [],           // Estado Inicial
-          testTodos     // Resposta da API
-        ], done)
-      )
-      .subscribe()
-
     // When: chama-se o metodo getTodos
     todosService.getTodos();
+
+    // Then: o estado local deve armazenar os todos da API
+    expect(todosService.state.todos).toEqual(testTodos);
+    done();
   })
 
   it('deve obter to-dos da API quando chamar getTodos (HttpClientTestingModule)', (done) => {
@@ -91,6 +84,9 @@ describe('TodosService', () => {
 
     // When: deleta-se um todo
     todosService.deleteTodo(testTodos[0].id);
+
+    expect(todosService.state.todos).toEqual(testTodos.slice(1, testTodos.length));
+    done();
   })
 
   // Testar metodo de update do todo

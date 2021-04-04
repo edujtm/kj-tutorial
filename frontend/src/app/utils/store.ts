@@ -6,7 +6,7 @@ import { distinctUntilChanged, map } from 'rxjs/operators';
 export class Store<T> {
   private store$: BehaviorSubject<T> = new BehaviorSubject<T>(null);
 
-  protected get state(): T {
+  public get state(): T {
     return this.store$.getValue();
   }
 
