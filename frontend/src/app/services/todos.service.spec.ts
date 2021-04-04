@@ -75,8 +75,26 @@ describe('TodosService', () => {
     req.flush({ todos: testTodos });
   })
 
+  // Testar metodo de delete do todo
+  // retorno da api DELETE /todos/:id
+  // {
+  //  message: string,
+  //  todos: Todo[],
+  //  todo: Todo
+  // }
+  it('deve remover item no estado local após sucesso no DELETE da API de todos', (done) => {
+    httpSpy.delete.and.returnValue(of({}))
+
+    // Given: já foram obtido os todos da API.
+    httpSpy.get.and.returnValue(of({ todos: testTodos }));
+    todosService.getTodos();
+
+    // When: deleta-se um todo
+    todosService.deleteTodo(testTodos[0].id);
+  })
+
   // Testar metodo de update do todo
-  // retorno da api PUT /todos/:id
+  // retorno da api UPDATE /todos/:id
   // {
   //  message: string,
   //  todos: Todo[],
