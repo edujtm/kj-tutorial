@@ -20,13 +20,13 @@ describe('TodosService', () => {
   })
 
   // Testar metodo de update do todo
-  // retorno da api PUT /todos/:id
+  // retorno da api DELETE /todos/:id
   // {
   //  message: string,
   //  todos: Todo[],
   //  todo: Todo
   // }
-  it('deve atualizar item no estado local após sucesso no PUT da API de todos', () => {
+  it('deve remover item no estado local após sucesso no DELETE da API de todos', () => {
 
   })
 });
