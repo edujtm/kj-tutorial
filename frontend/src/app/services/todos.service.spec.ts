@@ -19,7 +19,7 @@ describe('TodosService', () => {
 
   })
 
-  // Testar metodo de update do todo
+  // Testar metodo de delete do todo
   // retorno da api DELETE /todos/:id
   // {
   //  message: string,
