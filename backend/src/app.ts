@@ -7,7 +7,8 @@ import todoRoutes from "./routes";
 import Todo from './models/todo';
 
 
-const PORT: string | number = process.env.PORT || 4000
+const PORT: string | number = process.env.KJ_PORT || 4000
+const HOST: string = process.env.KJ_HOST || "localhost"
 
 createConnection({
   type: "sqlite",
@@ -25,6 +26,6 @@ createConnection({
 
 
   app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server running on http://${HOST}:${PORT}`);
   });
 }).catch(error => console.log(`TypeORM error: ${error}`));

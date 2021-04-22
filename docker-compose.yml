@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+  frontend:
+    image: kj-frontend
+    command: [sh, -c, "npm install && ng serve --host 0.0.0.0 --port 4200"]
+    ports:
+      - 4200:4200
+    volumes:
+      - ./frontend:/app
+  backend:
+    image: node:15.14.0-alpine3.10
+    command: [sh, -c, "npm install && npm run start"]
+    working_dir: /app
+    ports:
+      - 4000:4000
+    volumes:
+      - ./backend:/app
+    environment:
+      KJ_HOST: "0.0.0.0"
